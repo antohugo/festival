@@ -2,7 +2,7 @@
 
 try {
 // prepare select statement
-$stmt = $pdo->prepare("SELECT * FROM users");
+$stmt = $pdo->prepare("SELECT * FROM festival");
 // execute statement
 $stmt->execute();
 // fetch data
