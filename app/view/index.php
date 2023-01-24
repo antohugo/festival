@@ -12,7 +12,8 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <link href="../" rel=" stylesheet">
+    <link href="../../../public/style.css" rel=" stylesheet">
+
 </head>
 
 <body>
@@ -20,10 +21,10 @@
         <div class="table-responsive">
             <div class="form-outline">
                 <input type="search" id="form1" class="form-control" />
-                <label class="form-label" for="form1">Search</label>
+                <label class="form-label" for="form1"></label>
             </div>
             <button type="button" class="btn btn-primary">
-                <i class="fas fa-search"></i>
+                <i class="fa fa-search" aria-hidden="true"> Search</i>
             </button>
         </div>
         <div class="table-wrapper">
@@ -257,8 +258,7 @@
     </div>
 </body>
 
-</html> <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-<input type="submit" class="btn btn-success" value="Add">
+</html>
 </div>
 </form>
 </div>
@@ -320,7 +320,7 @@
         </div>
     </div>
 </div>
-<script src="public/script.js"></script>
+<script src="../../../public/script.js"></script>
 </body>
 
 </html>
