@@ -10,11 +10,11 @@
     <?php
     $servername = 'localhost';
     $username = 'root';
-    $password = 'root';
+    $password = '';
 
     //On établit la connexion
     try {
-        $pdo = new PDO("mysql:host=hostname;dbname=database", "username", "password");
+        $pdo = new PDO("mysql:host=localhost;dbname=bdd_festival", "root", "");
         // connection successful
         echo "Connection established";
     } catch (PDOException $e) {
