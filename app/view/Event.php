@@ -21,7 +21,7 @@ if (!empty($_POST["token"]) && $_POST["token"] == $_SESSION["token"]) {
 
 //*!Connection to the DB
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=festival_bdd", "ihssane", "");
+    $pdo = new PDO("mysql:host=localhost;dbname=testfesti", "ihssane", "");
     echo "Connection established";
 } catch (PDOException $e) {
 
@@ -102,6 +102,38 @@ try {
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
+//* create nomscene
+try {
+   
+
+    if (
+        isset($_POST['insertdata']) && !empty($_POST['Id_eve'])
+        && !empty($_POST['nomScene'])
+        && !empty($_POST['Id_group'])
+       
+    ) {
+
+        $stmt1 = $pdo->prepare('INSERT INTO scene (Id_eve, Id_group, nomScene)
+            VALUES (:Id_eve, :Id_group, :nomScene)');
+
+       
+
+        $stmt1->bindParam(':Id_eve', $_POST['Id_eve']);
+        $stmt1->bindParam(':Id_group', $_POST['Id_group']);
+        $stmt1->bindParam(':nomScene', $_POST['nomScene']);
+    
+
+        if (!$stmt1->execute()) {
+            $success = false;
+        }
+    }
+
+   
+    // }
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+
 
 //*update
 
@@ -205,6 +237,37 @@ try {
     echo "Error: " . $e->getMessage();
 }
 
+//*3 
+try {
+
+    if (
+        isset($_POST['updatedata'])
+        && !empty($_POST['Id_eve'])
+        && !empty($_POST['Id_group'])
+        && !empty($_POST['nomScene'])
+
+    ) {
+        // prepare update statement
+        $stmt = $pdo->prepare('UPDATE scene
+        SET scene.nomScene = :nomScene 
+        WHERE scene.Id_eve = :Id_eve AND scene.Id_group = :Id_group');
+
+        // bind parameters
+        $stmt->bindParam(':Id_eve', $_POST['Id_eve']);
+        $stmt->bindParam(':Id_group', $_POST['Id_group']);
+        $stmt->bindParam(':nomScene', $_POST['nomScene']);
+        // execute statement
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            echo 'Data updated successfully';
+        } else {
+            echo 'Error updating data';
+        }
+    }
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
 
 //*delete
 try {
@@ -268,7 +331,8 @@ try {
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal" data-target="#addEmployeeModal"><i class="material-icons">&#xE147;</i> <span>Add New
+                        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"
+                            data-target="#addEmployeeModal"><i class="material-icons">&#xE147;</i> <span>Add New
                                 Events and Artists</span></a>
                     </div>
                 </div>
@@ -296,26 +360,29 @@ try {
                     <?php
                     foreach ($result as $res) {
                     ?>
-                        <tr>
-                            <td>
-                                <span class="custom-checkbox">
-                                    <input type="checkbox" id="checkbox1" name="options[]" value="1">
-                                    <label for="checkbox1"></label>
-                                </span>
-                            </td>
+                    <tr>
+                        <td>
+                            <span class="custom-checkbox">
+                                <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                <label for="checkbox1"></label>
+                            </span>
+                        </td>
 
-                            <td><?= htmlspecialchars($res['Id_eve']) ?></td>
-                            <td><?= htmlspecialchars($res['nomEvenement']) ?></td>
-                            <td><?= htmlspecialchars($res['dateDebutEvt']) ?></td>
-                            <td><?= htmlspecialchars($res['dateFinEvt']) ?></td>
-                            <td><?= htmlspecialchars($res['nomGroupe']) ?></td>
-                            <td><?= htmlspecialchars($res['nomScene']) ?></td>
-                            <td><?= htmlspecialchars($res['Id_group']) ?></td>
-                            <td>
-                                <a href="#editEmployeeModal" class="editbtn" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit" data-target="editEmployeeModal">&#xE254;</i></a>
-                                <a href="#deleteEmployeeModal" class="delete deletebtn" data-id="<?= $res['Id_eve'] ?>" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                            </td>
-                        </tr>
+                        <td><?= htmlspecialchars($res['Id_eve']) ?></td>
+                        <td><?= htmlspecialchars($res['nomEvenement']) ?></td>
+                        <td><?= htmlspecialchars($res['dateDebutEvt']) ?></td>
+                        <td><?= htmlspecialchars($res['dateFinEvt']) ?></td>
+                        <td><?= htmlspecialchars($res['nomGroupe']) ?></td>
+                        <td><?= htmlspecialchars($res['nomScene']) ?></td>
+                        <td><?= htmlspecialchars($res['Id_group']) ?></td>
+                        <td>
+                            <a href="#editEmployeeModal" class="editbtn" data-toggle="modal"><i class="material-icons"
+                                    data-toggle="tooltip" title="Edit" data-target="editEmployeeModal">&#xE254;</i></a>
+                            <a href="#deleteEmployeeModal" class="delete deletebtn" data-id="<?= $res['Id_eve'] ?>"
+                                data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                                    title="Delete">&#xE872;</i></a>
+                        </td>
+                    </tr>
 
                     <?php
                     }
@@ -340,7 +407,7 @@ try {
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     </div>
                     <div class="modal-body">
-                    <div class="form-group">
+                        <div class="form-group">
                             <label>Event Number</label>
                             <input type="text" name="Id_eve" class="form-control" required>
                         </div>
@@ -401,11 +468,13 @@ try {
                         </div>
                         <div class="form-group">
                             <label>Start Date</label>
-                            <input type="datetime-local" class="form-control" name="dateDebutEvt" id="dateDebutEvt" required>
+                            <input type="datetime-local" class="form-control" name="dateDebutEvt" id="dateDebutEvt"
+                                required>
                         </div>
                         <div class="form-group">
                             <label>End Date</label>
-                            <input type="datetime-local" class="form-control" name="dateFinEvt" id="dateFinEvt" required>
+                            <input type="datetime-local" class="form-control" name="dateFinEvt" id="dateFinEvt"
+                                required>
                         </div>
                         <div class="form-group">
                             <label>Group name</label>
@@ -443,7 +512,8 @@ try {
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" name="Id_eve" id="Id_eve" value="<?= $res['Id_eve'] ?>" <p>Are you sure you want to delete these Records?</p>
+                        <input type="hidden" name="Id_eve" id="Id_eve" value="<?= $res['Id_eve'] ?>" <p>Are you sure you
+                        want to delete these Records?</p>
                         <p class="text-warning"><small>This action cannot be undone.</small></p>
                     </div>
                     <div class="modal-footer">
