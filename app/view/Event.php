@@ -1,6 +1,5 @@
 <?php
 
-
 session_start();
 
 //*!CSRF TOKEN
@@ -57,7 +56,7 @@ try {
 try {
     $success = true;
 
-
+    //create event
     if (
         isset($_POST['insertdata']) && !empty($_POST['nomEvenement'])
         && !empty($_POST['dateDebutEvt'])
@@ -73,12 +72,13 @@ try {
         $stmt1->bindParam(':nomEvenement', $_POST['nomEvenement']);
         $stmt1->bindParam(':dateDebutEvt', $date1);
         $stmt1->bindParam(':dateFinEvt', $date2);
-
+        //execute
         if (!$stmt1->execute()) {
             $success = false;
         }
     }
 
+    //create group
     if (
         isset($_POST['insertdata'])
         && !empty($_POST['nomGroupe'])
@@ -98,37 +98,34 @@ try {
     }
 
     echo 'Error inserting data';
-    // }
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
-//* create nomscene
 try {
-   
-
+    // create nomscene
     if (
         isset($_POST['insertdata']) && !empty($_POST['Id_eve'])
         && !empty($_POST['nomScene'])
         && !empty($_POST['Id_group'])
-       
+
     ) {
 
         $stmt1 = $pdo->prepare('INSERT INTO scene (Id_eve, Id_group, nomScene)
             VALUES (:Id_eve, :Id_group, :nomScene)');
 
-       
+
 
         $stmt1->bindParam(':Id_eve', $_POST['Id_eve']);
         $stmt1->bindParam(':Id_group', $_POST['Id_group']);
         $stmt1->bindParam(':nomScene', $_POST['nomScene']);
-    
+
 
         if (!$stmt1->execute()) {
             $success = false;
         }
     }
 
-   
+
     // }
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
@@ -138,6 +135,7 @@ try {
 //*update
 
 try {
+    //update event
 
     // check if form data is valid
     if (
@@ -173,11 +171,12 @@ try {
     echo "Error: " . $e->getMessage();
 }
 
-//?Update
 
 try {
 
     if (
+        //update group
+
         isset($_POST['updatedata'])
         && !empty($_POST['nomGroupe'])
         && !empty($_POST['Id_group'])
@@ -207,6 +206,7 @@ try {
 
 
 try {
+    //update scene
 
     if (
         isset($_POST['updatedata'])
@@ -227,43 +227,11 @@ try {
         // execute statement
         $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
-            echo 'Data updated successfully';
-        } else {
-            echo 'Error updating data';
-        }
-    }
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
-}
-
-//*3 
-try {
-
-    if (
-        isset($_POST['updatedata'])
-        && !empty($_POST['Id_eve'])
-        && !empty($_POST['Id_group'])
-        && !empty($_POST['nomScene'])
-
-    ) {
-        // prepare update statement
-        $stmt = $pdo->prepare('UPDATE scene
-        SET scene.nomScene = :nomScene 
-        WHERE scene.Id_eve = :Id_eve AND scene.Id_group = :Id_group');
-
-        // bind parameters
-        $stmt->bindParam(':Id_eve', $_POST['Id_eve']);
-        $stmt->bindParam(':Id_group', $_POST['Id_group']);
-        $stmt->bindParam(':nomScene', $_POST['nomScene']);
-        // execute statement
-        $stmt->execute();
-
-        if ($stmt->rowCount() > 0) {
-            echo 'Data updated successfully';
-        } else {
-            echo 'Error updating data';
-        }
+        // if ($stmt->rowCount() > 0) {
+        //     echo 'Data updated successfully';
+        // } else {
+        //     echo 'Error updating data';
+        // }
     }
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
@@ -272,21 +240,22 @@ try {
 //*delete
 try {
 
-    var_dump($_POST);
+    // var_dump($_POST);
 
-    $Id_eve = $_POST['Id_eve'];
-    // check if form data is valid
+ 
+
     if (
         isset($_POST['deletedata'])
         && !empty($_POST['Id_eve'])
 
     ) {
 
+        $Id_eve = $_POST['Id_eve'];
         //delete the row in the evenement table
         $stmt4 = $pdo->prepare('DELETE FROM evenement WHERE Id_eve = :Id_eve');
         $stmt4->bindParam(':Id_eve', $Id_eve);
-        // execute statement
 
+        // execute statement
         $stmt4->execute();
     }
 } catch (PDOException $e) {
