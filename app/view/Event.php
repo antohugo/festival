@@ -340,6 +340,10 @@ try {
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     </div>
                     <div class="modal-body">
+                    <div class="form-group">
+                            <label>Event Number</label>
+                            <input type="text" name="Id_eve" class="form-control" required>
+                        </div>
                         <div class="form-group">
                             <label>Event Name</label>
                             <input type="text" name="nomEvenement" class="form-control" required>
